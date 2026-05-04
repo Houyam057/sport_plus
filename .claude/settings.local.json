@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -rn 'first_name\\\\|last_name\\\\|$_SESSION\\\\['\\\\''user'\\\\''\\\\]\\\\|user_name\\\\b' C:/xampp_new/htdocs/sport_plus/controllers/ C:/xampp_new/htdocs/sport_plus/models/ C:/xampp_new/htdocs/sport_plus/views/)",
+      "Bash(grep -rn 'first_name\\\\|last_name\\\\|\\\\['\\\\''user'\\\\''\\\\]\\\\|user_name\\\\b\\\\|->users\\\\b\\\\|password\\\\s*=\\\\s*$_POST\\\\['\\\\''password'\\\\''\\\\]' C:/xampp_new/htdocs/sport_plus/controllers/ C:/xampp_new/htdocs/sport_plus/models/ C:/xampp_new/htdocs/sport_plus/views/)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp"
+    ]
+  }
+}
