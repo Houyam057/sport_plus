@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../models/Terrain.php';
 require_once __DIR__ . '/../models/Avis.php';
+require_once __DIR__ . '/../models/Gamematch.php';
 
 class TerrainController {
 
@@ -19,6 +20,10 @@ class TerrainController {
         $avis    = Avis::byTerrain($id);
         $avgNote = Avis::avgNote($id);
         $nbAvis  = Avis::countByTerrain($id);
+
+        // Seed & load matches for this terrain
+        GameMatch::seedForTerrain($id, $terrain['type_sport']);
+        $matches = GameMatch::forTerrain($id);
 
         require __DIR__ . '/../views/terrain-detail.php';
     }

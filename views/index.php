@@ -225,7 +225,7 @@
         <div class="hero-panel" style="background-image:url('https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?auto=format&fit=crop&w=1200&q=80')"></div>
       </div>
       <div class="hero-img-item">
-        <div class="hero-panel" style="background-image:url('https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=1200&q=80')"></div>
+        <div class="hero-panel" style="background-image:url('https://i.pinimg.com/1200x/b7/55/1d/b7551dab633bdd6d06cba6bb713bf628.jpg')"></div>
       </div>
     </div>
   </div>
@@ -237,7 +237,7 @@
   <h2 class="section-title center">Book Across Morocco</h2>
   <div class="cities-grid">
     <a href="/sport_plus/terrains?city=Tangier" class="city-card">
-      <div class="city-img" style="background-image:url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1000&q=80')"></div>
+      <div class="city-img" style="background-image:url('https://i.pinimg.com/736x/87/55/85/875585748dd5ff5656424f63fe0b9c80.jpg')"></div>
       <div class="city-overlay"></div>
       <div class="city-info">
         <h3>Tangier</h3>
@@ -245,7 +245,7 @@
       </div>
     </a>
     <a href="/sport_plus/terrains?city=Marrakesh" class="city-card">
-      <div class="city-img" style="background-image:url('https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?auto=format&fit=crop&w=1000&q=80')"></div>
+      <div class="city-img" style="background-image:url('https://i.pinimg.com/1200x/ab/02/44/ab024490d6f080530c0da81877240166.jpg')"></div>
       <div class="city-overlay"></div>
       <div class="city-info">
         <h3>Marrakesh</h3>
@@ -253,7 +253,7 @@
       </div>
     </a>
     <a href="/sport_plus/terrains?city=Casablanca" class="city-card">
-      <div class="city-img" style="background-image:url('https://images.unsplash.com/photo-1519861531473-9200262188bf?auto=format&fit=crop&w=1000&q=80')"></div>
+      <div class="city-img" style="background-image:url('https://i.pinimg.com/1200x/06/cf/a9/06cfa968d4345204588f16d8593001b6.jpg')"></div>
       <div class="city-overlay"></div>
       <div class="city-info">
         <h3>Casablanca</h3>
@@ -307,13 +307,7 @@
   </div>
   <div class="terrains-grid">
     <?php
-      // Use real DB terrains passed by HomeController
-      $_hSportImg = [
-        'Football'   => 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=500&q=80',
-        'Tennis'     => 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=500&q=80',
-        'Basketball' => 'https://images.unsplash.com/photo-1546519638405-a9d1b2f5b8b3?w=500&q=80',
-        'Padel'      => 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=500&q=80',
-      ];
+      require_once __DIR__ . '/../config/sport_images.php';
       $_hCityBadge = ['marrakesh'=>'marrakesh','casablanca'=>'casa'];
       $_hSportTag  = ['tennis'=>'tennis','padel'=>'padel','basketball'=>'basketball'];
       $homeTerrains = array_slice($terrains ?? [], 0, 9);
@@ -322,7 +316,7 @@
         $hCity    = $t['localisation'] ?? '';
         $hCityKey = function_exists('_cityKey') ? _cityKey($hCity) : strtolower($hCity);
         $hSKey    = strtolower($hSport);
-        $hImg     = $_hSportImg[$hSport] ?? $_hSportImg['Football'];
+        $hImg     = sportImage($hSport);
         $hBadge   = $_hCityBadge[$hCityKey] ?? '';
         $hTag     = $_hSportTag[$hSKey]     ?? '';
     ?>
@@ -349,12 +343,12 @@
   <p class="label-tag center">FOLLOW US</p>
   <h2 class="section-title center">Join our community</h2>
   <div class="community-grid">
-    <div class="comm-img" style="background:url('https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=300&q=80') center/cover"></div>
-    <div class="comm-img" style="background:url('https://images.unsplash.com/photo-1546519638405-a9d1b2f5b8b3?w=300&q=80') center/cover"></div>
-    <div class="comm-img" style="background:url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=300&q=80') center/cover"></div>
-    <div class="comm-img" style="background:url('https://images.unsplash.com/photo-1595435742656-5272d0b3fa82?w=300&q=80') center/cover"></div>
-    <div class="comm-img" style="background:url('https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=300&q=80') center/cover"></div>
-    <div class="comm-img" style="background:url('https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=300&q=80') center/cover"></div>
+    <div class="comm-img" style="background:url('https://i.pinimg.com/1200x/37/73/ed/3773ed1e01ec77daa086c5b9d582f4ef.jpg') center/cover"></div>
+    <div class="comm-img" style="background:url('https://i.pinimg.com/1200x/40/c9/96/40c996465fc444f90c969779e2d49398.jpg') center/cover"></div>
+    <div class="comm-img" style="background:url('https://i.pinimg.com/1200x/62/54/a7/6254a7f68d755d97d15e49b1531ca891.jpg') center/cover"></div>
+    <div class="comm-img" style="background:url('https://i.pinimg.com/1200x/31/8d/ad/318dad6e323a680bfdfc3f95bee45035.jpg') center/cover"></div>
+    <div class="comm-img" style="background:url('https://i.pinimg.com/736x/b0/85/ec/b085ecd10d5a0d90dab7c0c571daa087.jpg') center/cover"></div>
+    <div class="comm-img" style="background:url('https://i.pinimg.com/1200x/78/92/73/78927311e32410c75439fb31a3301dbc.jpg') center/cover"></div>
   </div>
   <div class="social-row">
     <span class="handle"><span class="dot"></span> @sportplus_official</span>

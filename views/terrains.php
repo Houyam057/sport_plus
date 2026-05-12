@@ -2,14 +2,7 @@
 // $terrains is injected by TerrainController::index() from the database
 // Fallback: empty array if controller didn't provide it
 if (!isset($terrains)) $terrains = [];
-
-// Helper maps (DB uses nom, type_sport, localisation, prix)
-$_sportImg = [
-    'Football'   => 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=500&q=80',
-    'Tennis'     => 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=500&q=80',
-    'Basketball' => 'https://images.unsplash.com/photo-1546519638405-a9d1b2f5b8b3?w=500&q=80',
-    'Padel'      => 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=500&q=80',
-];
+require_once __DIR__ . '/../config/sport_images.php';
 $_cityBadge = ['marrakesh'=>'marrakesh','casablanca'=>'casa'];
 $_sportTag  = ['tennis'=>'tennis','padel'=>'padel','basketball'=>'basketball'];
 // Normalise city name to a filter key
@@ -111,7 +104,7 @@ function _cityKey(string $loc): string {
         $city    = $t['localisation'] ?? '';
         $cityKey = _cityKey($city);
         $sKey    = strtolower($sport);
-        $img     = $_sportImg[$sport] ?? $_sportImg['Football'];
+        $img     = sportImage($sport);
         $badge   = $_cityBadge[$cityKey] ?? '';
         $tag     = $_sportTag[$sKey]     ?? '';
       ?>

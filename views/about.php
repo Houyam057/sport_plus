@@ -68,10 +68,10 @@
   </div>
 </section>
 <section class="team-grid">
-  <div class="team-card"><div class="team-photo" style="background-image:url('https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&q=80')"></div><div><h3>Omar</h3><p class="terrain-loc">Operations</p></div></div>
-  <div class="team-card"><div class="team-photo" style="background-image:url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&q=80')"></div><div><h3>Sara</h3><p class="terrain-loc">Community</p></div></div>
-  <div class="team-card"><div class="team-photo" style="background-image:url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&q=80')"></div><div><h3>Youssef</h3><p class="terrain-loc">Partnerships</p></div></div>
-  <div class="team-card"><div class="team-photo" style="background-image:url('https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500&q=80')"></div><div><h3>Nadia</h3><p class="terrain-loc">Product</p></div></div>
+  <div class="team-card"><div class="team-photo" style="background-image:url('https://i.pinimg.com/1200x/f2/2f/ea/f22fea3216174bbfa3ae9ec9eaff04a8.jpg')"></div><div><h3>Omar</h3><p class="terrain-loc">Operations</p></div></div>
+  <div class="team-card"><div class="team-photo" style="background-image:url('https://i.pinimg.com/736x/0c/22/90/0c2290cf168019e6cbfe5cb31187a471.jpg')"></div><div><h3>Sara</h3><p class="terrain-loc">Community</p></div></div>
+  <div class="team-card"><div class="team-photo" style="background-image:url('https://i.pinimg.com/1200x/bd/d3/bc/bdd3bc41294ea5a7d04f70c36893d3eb.jpg')"></div><div><h3>Youssef</h3><p class="terrain-loc">Partnerships</p></div></div>
+  <div class="team-card"><div class="team-photo" style="background-image:url('https://i.pinimg.com/736x/7a/1e/4c/7a1e4c890c618df4132d895c1fc45f2a.jpg')"></div><div><h3>Nadia</h3><p class="terrain-loc">Product</p></div></div>
 </section>
 <section class="about-cta"><h2 class="section-title center">Ready to play?</h2><a href="/sport_plus/terrains" class="btn-green large">Book Now →</a></section>
 </body>

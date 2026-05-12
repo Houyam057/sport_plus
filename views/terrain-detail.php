@@ -1,21 +1,18 @@
 <?php
 // Provided by TerrainController::show(): $terrain, $slots, $avis, $avgNote, $nbAvis
+require_once __DIR__ . '/../config/sport_images.php';
 $sportEmoji = ['Football'=>'⚽','Tennis'=>'🎾','Padel'=>'🏓','Basketball'=>'🏀'];
-$sportImg   = [
-    'Football'   => 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=900&q=85',
-    'Tennis'     => 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=900&q=85',
-    'Padel'      => 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=900&q=85',
-    'Basketball' => 'https://images.unsplash.com/photo-1546519638405-a9d1b2f5b8b3?w=900&q=85',
-];
 $cityClass = ['Marrakesh'=>'marrakesh','Casablanca'=>'casa','Tanger'=>'','Tangier'=>''];
 
 $emoji     = $sportEmoji[$terrain['type_sport']] ?? '🏟️';
-$imgUrl    = $sportImg[$terrain['type_sport']] ?? $sportImg['Football'];
+$imgUrl    = sportImage($terrain['type_sport'], 'detail');
 $badgeCls  = $cityClass[$terrain['localisation']] ?? '';
 $theme     = getTheme();
 
-$avisSuccess = flash('avis_success');
-$avisError   = flash('avis_error');
+$avisSuccess  = flash('avis_success');
+$avisError    = flash('avis_error');
+$matchSuccess = flash('success');
+$matchError   = flash('error');
 
 function starsHtml($note) {
     $note = (int)round($note);
@@ -36,9 +33,8 @@ function starsHtml($note) {
   <link rel="stylesheet" href="/sport_plus/public/css/style.css"/>
   <style>
     .detail-layout { display:grid; grid-template-columns:1fr 380px; gap:48px; padding:60px; background:var(--bg); }
-    .terrain-gallery { display:grid; grid-template-columns:1fr 1fr; grid-template-rows:360px 180px; gap:12px; border-radius:var(--radius-lg); overflow:hidden; margin-bottom:40px; }
-    .gal-main { grid-column:1/3; background:url('<?= $imgUrl ?>') center/cover; }
-    .gal-sm   { background-size:cover; background-position:center; }
+    .terrain-gallery { border-radius:var(--radius-lg); overflow:hidden; margin-bottom:40px; height:420px; }
+    .gal-main { width:100%; height:100%; background-size:cover; background-position:center; }
     .terrain-info h1 { font-size:36px; font-weight:800; margin-bottom:10px; }
     .terrain-meta { display:flex; gap:24px; align-items:center; flex-wrap:wrap; margin-bottom:28px; }
     .meta-item { display:flex; align-items:center; gap:6px; font-size:14px; color:var(--gray); }
@@ -94,6 +90,11 @@ function starsHtml($note) {
   <a href="/sport_plus/terrains" style="color:var(--gray);font-size:14px">← <?= t('Back to Terrains','Retour aux terrains') ?></a>
 </div>
 
+<?php if ($matchSuccess || $matchError): ?>
+<div style="padding:14px 60px;<?= $matchSuccess ? 'background:rgba(76,255,114,.1);color:#4cff72;border-bottom:1px solid rgba(76,255,114,.2)' : 'background:rgba(255,76,76,.1);color:#ff7c7c;border-bottom:1px solid rgba(255,76,76,.2)' ?>;font-size:14px">
+  <?= e($matchSuccess ?: $matchError) ?>
+</div>
+<?php endif; ?>
 <?php if ($avisSuccess || $avisError): ?>
 <div style="padding:14px 60px;<?= $avisSuccess ? 'background:rgba(76,255,114,.1);color:#4cff72;border-bottom:1px solid rgba(76,255,114,.2)' : 'background:rgba(255,76,76,.1);color:#ff7c7c;border-bottom:1px solid rgba(255,76,76,.2)' ?>;font-size:14px">
   <?= e($avisSuccess ?: $avisError) ?>
@@ -104,9 +105,7 @@ function starsHtml($note) {
   <!-- LEFT: Info -->
   <div>
     <div class="terrain-gallery">
-      <div class="gal-main"></div>
-      <div class="gal-sm" style="background-image:url('https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=400&q=80')"></div>
-      <div class="gal-sm" style="background-image:url('https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400&q=80')"></div>
+      <div class="gal-main" style="background-image:url('<?= $imgUrl ?>')"></div>
     </div>
 
     <div class="terrain-info">
@@ -141,6 +140,99 @@ function starsHtml($note) {
         <div class="amenity">☕ <?= t('Refreshments','Boissons') ?></div>
         <div class="amenity">📶 WiFi</div>
       </div>
+
+      <!-- JOIN A MATCH SECTION -->
+      <h3 class="section-h">🏆 <?= t('Join a Match','Rejoindre un Match') ?></h3>
+      <?php if (!empty($matches)): ?>
+        <div class="matches-list" style="display:flex;flex-direction:column;gap:14px;margin-bottom:36px">
+          <?php foreach ($matches as $m):
+            $spotsLeft  = max(0, (int)$m['spots_left']);
+            $isFull     = $m['status'] === 'full' || $spotsLeft <= 0;
+            $alreadyIn  = GameMatch::alreadyJoined((int)$m['id']);
+            $pct        = $m['max_players'] > 0 ? round((int)$m['current_players'] / (int)$m['max_players'] * 100) : 0;
+            $barColor   = $isFull ? '#ff4c4c' : ($pct >= 70 ? '#ffc84c' : 'var(--green)');
+          ?>
+          <div style="background:var(--card);border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius);padding:18px 20px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px">
+              <div>
+                <p style="font-weight:700;font-size:15px;margin:0 0 4px"><?= e($m['title']) ?></p>
+                <p style="color:var(--gray);font-size:13px;margin:0">
+                  📅 <?= date('D d M', strtotime($m['date'])) ?>
+                  &nbsp;⏰ <?= substr($m['start_time'] ?? '00:00', 0, 5) ?>
+                  &nbsp;👤 <?= e($m['creator_nom'] ?? 'Organisateur') ?>
+                </p>
+              </div>
+              <span style="white-space:nowrap;font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;
+                background:<?= $isFull ? 'rgba(255,76,76,.15)' : 'rgba(76,255,114,.1)' ?>;
+                color:<?= $isFull ? '#ff7c7c' : 'var(--green)' ?>;
+                border:1px solid <?= $isFull ? 'rgba(255,76,76,.3)' : 'rgba(76,255,114,.25)' ?>">
+                <?= $isFull ? t('Full','Complet') : "{$spotsLeft} " . t('spots left','places restantes') ?>
+              </span>
+            </div>
+            <!-- Progress bar -->
+            <div style="background:rgba(255,255,255,0.07);border-radius:4px;height:6px;margin-bottom:12px;overflow:hidden">
+              <div style="height:100%;width:<?= $pct ?>%;background:<?= $barColor ?>;border-radius:4px;transition:width .3s"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:12px;color:var(--gray)"><?= $m['current_players'] ?>/<?= $m['max_players'] ?> <?= t('players','joueurs') ?></span>
+              <?php if ($alreadyIn): ?>
+                <span style="font-size:13px;color:var(--green);font-weight:600">✓ <?= t('Joined','Inscrit') ?></span>
+              <?php elseif ($isFull): ?>
+                <span style="font-size:13px;color:#ff7c7c"><?= t('No spots available','Aucune place disponible') ?></span>
+              <?php elseif (isLoggedIn()): ?>
+                <form method="POST" action="/sport_plus/match/join" style="margin:0">
+                  <input type="hidden" name="match_id" value="<?= (int)$m['id'] ?>">
+                  <input type="hidden" name="redirect" value="/sport_plus/terrain/<?= (int)$terrain['id'] ?>">
+                  <button type="submit" class="btn-green small" style="padding:7px 18px;font-size:13px">
+                    <?= t('Join','Rejoindre') ?>
+                  </button>
+                </form>
+              <?php else: ?>
+                <a href="/sport_plus/login" class="btn-ghost small" style="padding:7px 18px;font-size:13px">
+                  <?= t('Login to join','Connectez-vous pour rejoindre') ?>
+                </a>
+              <?php endif; ?>
+            </div>
+          </div>
+          <?php endforeach; ?>
+        </div>
+      <?php else: ?>
+        <p style="color:var(--gray);font-size:14px;margin-bottom:36px">
+          <?= t('No upcoming matches. Be the first to create one!', 'Aucun match à venir. Soyez le premier à en créer un !') ?>
+        </p>
+      <?php endif; ?>
+
+      <!-- CREATE A MATCH -->
+      <?php if (isLoggedIn()): ?>
+      <div style="background:var(--card);border:1px solid rgba(76,255,114,.2);border-radius:var(--radius);padding:20px;margin-bottom:36px">
+        <h4 style="margin:0 0 14px;font-size:15px">➕ <?= t('Create a Match','Créer un Match') ?></h4>
+        <form method="POST" action="/sport_plus/match/create" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <input type="hidden" name="terrain_id" value="<?= (int)$terrain['id'] ?>">
+          <input type="text" name="title" placeholder="<?= t('Match title','Titre du match') ?>" required
+            style="grid-column:1/3;background:var(--bg3);border:1px solid var(--gray2);color:var(--white);padding:10px 14px;border-radius:var(--radius);font-family:var(--font-body);font-size:14px;outline:none">
+          <input type="date" name="date" required min="<?= date('Y-m-d') ?>"
+            style="background:var(--bg3);border:1px solid var(--gray2);color:var(--white);padding:10px 14px;border-radius:var(--radius);font-family:var(--font-body);font-size:14px;outline:none">
+          <input type="time" name="start_time" required
+            style="background:var(--bg3);border:1px solid var(--gray2);color:var(--white);padding:10px 14px;border-radius:var(--radius);font-family:var(--font-body);font-size:14px;outline:none">
+          <select name="max_players"
+            style="background:var(--bg3);border:1px solid var(--gray2);color:var(--white);padding:10px 14px;border-radius:var(--radius);font-family:var(--font-body);font-size:14px;outline:none">
+            <option value="4">4 <?= t('players','joueurs') ?></option>
+            <option value="6">6 <?= t('players','joueurs') ?></option>
+            <option value="8">8 <?= t('players','joueurs') ?></option>
+            <option value="10" selected>10 <?= t('players','joueurs') ?></option>
+            <option value="14">14 <?= t('players','joueurs') ?></option>
+          </select>
+          <select name="level"
+            style="background:var(--bg3);border:1px solid var(--gray2);color:var(--white);padding:10px 14px;border-radius:var(--radius);font-family:var(--font-body);font-size:14px;outline:none">
+            <option value="any"><?= t('All levels','Tous niveaux') ?></option>
+            <option value="beginner"><?= t('Beginner','Débutant') ?></option>
+            <option value="intermediate"><?= t('Intermediate','Intermédiaire') ?></option>
+            <option value="advanced"><?= t('Advanced','Avancé') ?></option>
+          </select>
+          <button type="submit" class="btn-green" style="grid-column:1/3"><?= t('Create Match','Créer le match') ?></button>
+        </form>
+      </div>
+      <?php endif; ?>
 
       <!-- REVIEWS SECTION -->
       <h3 class="section-h" id="reviews-anchor">

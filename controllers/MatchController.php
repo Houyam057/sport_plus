@@ -29,11 +29,18 @@ class MatchController {
 
     public function join() {
         requireLogin();
-        $matchId = (int)($_POST['match_id'] ?? 0);
+        $matchId  = (int)($_POST['match_id'] ?? 0);
+        $back     = $_POST['redirect'] ?? null;
+
         if (GameMatch::join($matchId)) {
             flash('success', 'You joined the match!');
         } else {
-            flash('error', 'Could not join the match.');
+            flash('error', 'Could not join — match may be full or you already joined.');
+        }
+
+        if ($back) {
+            header('Location: ' . $back);
+            exit;
         }
         redirect('matches');
     }
